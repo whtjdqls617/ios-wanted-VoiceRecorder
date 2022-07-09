@@ -13,13 +13,14 @@ class PlayingViewController: UIViewController {
     // MARK: - IBOutlets
     
     @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var waveFormImageView: UIImageView!
+    @IBOutlet weak var imageLoadingView: UIActivityIndicatorView!
     @IBOutlet weak var playerControlView: UIStackView!
     @IBOutlet weak var volumeLabel: UILabel!
     @IBOutlet weak var volumeControlSlider: UISlider!
     @IBOutlet weak var voiceChangeSegmentedControl: UISegmentedControl!
     @IBOutlet weak var playButton: UIButton!
     @IBOutlet weak var positionProgressView: UIProgressView!
-    @IBOutlet weak var waveFormImageView: UIImageView!
     
     // MARK: - Properties
     
@@ -36,6 +37,7 @@ class PlayingViewController: UIViewController {
     private var displayLink: CADisplayLink?
     
     private var needsFileScheduled = true
+    private var isLoading = true
     
     private var audioFile: AVAudioFile?
     private var audioLengthSeconds: Double = 0
@@ -77,9 +79,18 @@ class PlayingViewController: UIViewController {
     // MARK: - Methods
     
     private func getImageFromFiresbase(_ fileName : String?) {
-        FireStorageManager.shared.downloadImage(fileName) { image in
-            self.waveFormImageView.image = image
+        if isLoading {
+            imageLoadingView.startAnimating()
+            waveFormImageView.isHidden = true
+            FireStorageManager.shared.downloadImage(fileName) { image in
+                self.waveFormImageView.image = image
+                self.waveFormImageView.isHidden = false
+                self.imageLoadingView.isHidden = true
+                self.isLoading = false
+            }
+            
         }
+        
     }
     
     private func setupAudio() {

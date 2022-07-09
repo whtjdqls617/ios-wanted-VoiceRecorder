@@ -207,6 +207,10 @@
                                     <constraint firstAttribute="height" constant="128" id="4vx-fn-luB"/>
                                 </constraints>
                             </imageView>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="rTW-ts-uJ8">
+                                <rect key="frame" x="177" y="270" width="20" height="20"/>
+                                <color key="color" systemColor="labelColor"/>
+                            </activityIndicatorView>
                             <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="QbY-Bq-pFQ">
                                 <rect key="frame" x="40" y="376.33333333333331" width="295" height="4"/>
                             </progressView>
@@ -286,8 +290,10 @@
                             <constraint firstItem="vAx-Kt-MEu" firstAttribute="top" secondItem="vKV-AA-4Ck" secondAttribute="bottom" constant="100" id="RwV-lD-kpY"/>
                             <constraint firstItem="MNs-qs-JV0" firstAttribute="top" secondItem="epG-fG-rh2" secondAttribute="bottom" constant="32" id="WF8-LW-PtE"/>
                             <constraint firstItem="vKV-AA-4Ck" firstAttribute="centerX" secondItem="jRn-dk-Vfd" secondAttribute="centerX" id="Wpj-fH-gIw"/>
+                            <constraint firstItem="rTW-ts-uJ8" firstAttribute="centerX" secondItem="vAx-Kt-MEu" secondAttribute="centerX" id="dQJ-Y6-gfF"/>
                             <constraint firstItem="FkC-sQ-Oeq" firstAttribute="top" secondItem="haY-Q9-0tn" secondAttribute="bottom" constant="48" id="gb1-nh-Dfa"/>
                             <constraint firstItem="jRn-dk-Vfd" firstAttribute="trailing" secondItem="vAx-Kt-MEu" secondAttribute="trailing" constant="40" id="pCi-hV-3je"/>
+                            <constraint firstItem="rTW-ts-uJ8" firstAttribute="centerY" secondItem="vAx-Kt-MEu" secondAttribute="centerY" id="pLW-sv-M3o"/>
                             <constraint firstItem="jRn-dk-Vfd" firstAttribute="trailing" secondItem="haY-Q9-0tn" secondAttribute="trailing" constant="50" id="pNM-6n-0oT"/>
                             <constraint firstItem="haY-Q9-0tn" firstAttribute="top" secondItem="MNs-qs-JV0" secondAttribute="bottom" constant="32" id="qWm-XP-Htx"/>
                             <constraint firstItem="jRn-dk-Vfd" firstAttribute="bottom" secondItem="FkC-sQ-Oeq" secondAttribute="bottom" constant="60" id="xVm-yC-kmm"/>
@@ -296,6 +302,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="imageLoadingView" destination="rTW-ts-uJ8" id="hPe-4p-K4w"/>
                         <outlet property="playButton" destination="xhf-LS-GKS" id="OBV-km-CZl"/>
                         <outlet property="playerControlView" destination="FkC-sQ-Oeq" id="T9t-Vy-0gv"/>
                         <outlet property="positionProgressView" destination="QbY-Bq-pFQ" id="Phv-w5-yeZ"/>
@@ -317,6 +324,9 @@
         <image name="goforward.5" catalog="system" width="121" height="128"/>
         <image name="play.fill" catalog="system" width="116" height="128"/>
         <image name="plus" catalog="system" width="128" height="113"/>
+        <systemColor name="labelColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
