@@ -48,6 +48,86 @@
 
 <br>
 
+## ⚠️ Trouble Shooting
+
+### “첫 화면에서 각 파일들의 duration”
+
+- 문제점
+    - 첫 화면에서 각 파일들의 duration을 받아오지 못함
+- 원인
+    - Firebase로부터 로컬에 저장하는 .write가 맨 마지막에 실행되서 player에 할당을 하지 못해서 duration이 공백으로 됨
+- 해결방안
+    - Closure내부 동작에 순서를 조정하여 write가 먼저 실행되게 변경
+ ~~~ swift
+    storageRef.write(toFile: localPath) { url, error in
+				if let url = url {
+		        items.append(url.absoluteString)
+        }
+        let sortedItems = items.sorted()
+        let itemsToURL = sortedItems.compactMap { URL(string: $0) }
+        completion(itemsToURL)
+}
+~~~
+
+</br>
+
+## 🤔  고민한 점
+### “파형 그리기”
+
+- 직면한 문제
+    - m4a파일의 어떤 정보를 가지고 파형을 그려야할 지 모르겠음
+    - view를 어떤식으로 처리해야 끊임없이 파형이 그려지는지 모르겠음
+- 해결방안
+    - audioRecorder의 averagePower를 이용해서 파형을 그리면 되는데, 여기서 그리는 도구인 UIBezierPath, CAShapeLayer를 이용해야한다.
+    
+    </br>
+    
+    ``` swift
+    private lazy var pencil = UIBezierPath()
+    private let waveLayer = CAShapeLayer() // 도형 애니메이션
+    
+    let averagePower = self.audioRecorder?.averagePower(forChannel: 0)
+                self.writeWaves(CGFloat(averagePower ?? 0.0), true)
+    ```
+    
+    ```swift
+    private func writeWaves(_ input: CGFloat, _ bool : Bool) {
+            if !bool {
+                start = firstPoint
+                if timer != nil || audioRecorder != nil {
+                    timer?.invalidate()
+                    recordingTimer?.invalidate()
+                    audioRecorder?.stop()
+                    audioRecorder = nil
+                }
+                return
+            } else {
+                if input < -55 {
+                    traitLength = 0.2
+                } else if input < -40 && input > -55 {
+                    traitLength = (input + 55) / 3
+                } else if input < -20 && input > -40 {
+                    traitLength = (input + 40) / 2
+                } else if input < -10 && input > -20 {
+                    traitLength = (input + 20) * 6
+                } else {
+                    traitLength = (input + 10) * 3
+                }
+                pencil.move(to: start)
+                pencil.addLine(to: CGPoint(x: start.x, y: start.y + traitLength))
+                pencil.move(to: start)
+                pencil.addLine(to: CGPoint(x: start.x, y: start.y - traitLength))
+                waveLayer.strokeColor = UIColor.gray.cgColor
+                waveLayer.path = pencil.cgPath
+                waveLayer.lineWidth = jump
+                waveFormCanvasView.layer.addSublayer(waveLayer)
+                start = CGPoint(x: start.x + jump, y: start.y)
+            }
+        }
+    ```
+    
+    - view의 width를 무한대로 지정하고 그려지는 것과 view의 이동 애니메이션 타이밍을 맞춘다.
+
 ## 🔀  Git Branch
 
 개별 브랜치 관리 및 병합의 안정성을 위해 `Git Forking WorkFlow`를 적용했습니다.
